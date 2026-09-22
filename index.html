@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>NOE · Un universo hecho para ti</title>
+<style>
+:root{--gold:#ffe9a6;--pink:#ff9fc7;--night:#05051c}
+*{box-sizing:border-box}body{margin:0;background:var(--night);color:#fff;font-family:Georgia,serif;overflow:hidden}
+button,input,textarea{font:inherit}.screen{position:fixed;inset:0;display:none}.screen.on{display:block}
+#intro{background:radial-gradient(circle at 50% 35%,#25256e,#080820 65%,#02020d);display:flex;align-items:center;justify-content:center;text-align:center}
+.introBox{padding:30px;max-width:650px}.introBox h1{font-size:clamp(38px,10vw,76px);color:var(--gold);margin:10px}.introBox p{font-size:20px;line-height:1.5;opacity:.9}
+.btn{border:0;border-radius:30px;padding:14px 25px;background:var(--gold);color:#191333;cursor:pointer;margin:6px;box-shadow:0 7px 25px #0008}
+#universe{background:radial-gradient(circle at 50% 45%,#191952 0,#070721 48%,#02020c 100%)}
+#stars,#flowers,#galaxy{position:absolute;inset:0}.star{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;box-shadow:0 0 8px #fff;animation:pulse 2s infinite alternate}
+@keyframes pulse{to{opacity:.2;transform:scale(.55)}}
+#galaxy .gstar{position:absolute;width:3px;height:3px;border-radius:50%;background:#fff;box-shadow:0 0 10px #fff;animation:orbit 12s linear infinite}
+@keyframes orbit{to{transform:rotate(360deg) translateX(var(--r)) rotate(-360deg)}}
+.noeTitle{position:absolute;top:8%;left:50%;transform:translateX(-50%);font-size:clamp(35px,9vw,72px);letter-spacing:.2em;color:#fff7c7;text-shadow:0 0 18px #fff,0 0 40px #a6b7ff;text-align:center;z-index:2}
+.sceneHint{position:absolute;bottom:5%;left:50%;transform:translateX(-50%);text-align:center;opacity:.8;z-index:5;width:90%}
+.flower{position:absolute;width:48px;height:75px;cursor:pointer;z-index:4;filter:drop-shadow(0 0 7px #ff7ba5)}
+.petal{position:absolute;width:22px;height:31px;background:#ff82ac;border-radius:70% 70% 45% 45%;left:13px;top:0}.petal:nth-child(2){transform:rotate(72deg);transform-origin:11px 24px}.petal:nth-child(3){transform:rotate(144deg);transform-origin:11px 24px}.petal:nth-child(4){transform:rotate(216deg);transform-origin:11px 24px}.petal:nth-child(5){transform:rotate(288deg);transform-origin:11px 24px}
+.flower i{position:absolute;width:13px;height:13px;background:#ffd65e;border-radius:50%;left:18px;top:18px}.stem{position:absolute;left:23px;top:38px;height:36px;width:3px;background:#70a86b}
+.msg{position:absolute;z-index:20;left:50%;top:18%;transform:translate(-50%,-10px);width:min(90%,520px);padding:18px 22px;border-radius:20px;background:#fff9e5;color:#302342;text-align:center;font-size:19px;box-shadow:0 12px 45px #0008;opacity:0;pointer-events:none;transition:.45s}.msg.show{opacity:1;transform:translate(-50%,0)}
+#editor{background:#0b0b28;overflow:auto;padding:20px}.panel{max-width:800px;margin:auto;background:#141440;padding:22px;border-radius:22px}.panel h2{color:var(--gold)}label{display:block;margin-top:14px}input,textarea{width:100%;padding:11px;border-radius:10px;border:1px solid #555;background:#080820;color:#fff}textarea{min-height:100px}
+.small{opacity:.75;font-size:14px;line-height:1.5}
+.close{position:fixed;top:15px;right:15px}
+</style>
+</head>
+<body>
+<section id="intro" class="screen on">
+ <div class="introBox">
+  <div style="font-size:65px">🌹✨🌙</div>
+  <h1>Un universo para Noe</h1>
+  <p>Un pequeño libro donde las estrellas forman su nombre y cada flor guarda algo bonito.</p>
+  <button class="btn" onclick="openUniverse()">Entrar al universo ✨</button>
+  <button class="btn" onclick="openEditor()">Personalizar mensajes ⚙️</button>
+ </div>
+</section>
+
+<section id="universe" class="screen">
+ <div id="stars"></div><div id="galaxy"></div><div id="flowers"></div>
+ <div class="noeTitle">NOE</div>
+ <div class="msg" id="msg"></div>
+ <div class="sceneHint">Toca las flores 🌸 o las estrellas ✨ · Cada una tiene un mensaje</div>
+ <button class="btn close" onclick="openEditor()" style="position:absolute;z-index:30">⚙️</button>
+</section>
+
+<section id="editor" class="screen">
+ <div class="panel">
+  <button class="btn" onclick="openUniverse()">Ver universo ✨</button>
+  <h2>Personaliza tu universo</h2>
+  <label>Nombre que formarán las estrellas</label><input id="nameInput" value="NOE">
+  <label>Mensaje de entrada</label><textarea id="introInput">Hay personas que llegan y hacen que hasta las estrellas parezcan tener otro brillo. ✨</textarea>
+  <label>Mensajes de las flores — uno por línea</label>
+  <textarea id="flowersInput">Única 🌸
+Maravillosa ✨
+Hermosa de una forma que no se puede explicar. 🌹
+Tu sonrisa puede cambiar un día entero. 💗
+Hay algo en ti que hace especial cualquier momento. 🌙
+Nunca olvides lo mucho que vales. ⭐
+Eres de esas personas que uno quiere cuidar. 🦋
+Tu forma de ser tiene una magia difícil de encontrar. 💫</textarea>
+  <label>Mensaje final</label><textarea id="finalInput">Y entre millones de estrellas, siempre habría una que reconocería: tú. ❤️</textarea>
+  <button class="btn" onclick="saveSettings()">Guardar cambios</button>
+  <p class="small">Puedes cambiar los textos cuando quieras. Si quieres agregar más flores, simplemente añade más líneas. La página las repartirá automáticamente por el escenario.</p>
+ </div>
+</section>
+
+<script>
+const $=id=>document.getElementById(id);
+let cfg=JSON.parse(localStorage.getItem('noeUniverse')||'null')||{
+ name:'NOE',
+ intro:'Hay personas que llegan y hacen que hasta las estrellas parezcan tener otro brillo. ✨',
+ flowers:['Única 🌸','Maravillosa ✨','Hermosa de una forma que no se puede explicar. 🌹','Tu sonrisa puede cambiar un día entero. 💗','Hay algo en ti que hace especial cualquier momento. 🌙','Nunca olvides lo mucho que vales. ⭐','Eres de esas personas que uno quiere cuidar. 🦋','Tu forma de ser tiene una magia difícil de encontrar. 💫'],
+ final:'Y entre millones de estrellas, siempre habría una que reconocería: tú. ❤️'
+};
+function screen(id){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('on'));$(id).classList.add('on')}
+function openUniverse(){build();screen('universe');show(cfg.intro)}
+function openEditor(){ $('nameInput').value=cfg.name;$('introInput').value=cfg.intro;$('flowersInput').value=cfg.flowers.join('\\n');$('finalInput').value=cfg.final;screen('editor')}
+function saveSettings(){cfg={name:$('nameInput').value.trim()||'NOE',intro:$('introInput').value.trim(),flowers:$('flowersInput').value.split('\\n').map(x=>x.trim()).filter(Boolean),final:$('finalInput').value.trim()};localStorage.setItem('noeUniverse',JSON.stringify(cfg));build();screen('universe');show('Guardado ✨ Ahora tu universo tiene tus propios mensajes.')}
+function show(t){$('msg').textContent=t;$('msg').classList.add('show');clearTimeout(window.mt);window.mt=setTimeout(()=>$('msg').classList.remove('show'),5000)}
+function build(){
+ $('stars').innerHTML='';$('galaxy').innerHTML='';$('flowers').innerHTML='';document.querySelector('.noeTitle').textContent=cfg.name.toUpperCase();
+ for(let i=0;i<105;i++){let s=document.createElement('span');s.className='star';s.style.left=Math.random()*100+'%';s.style.top=Math.random()*75+'%';s.style.animationDelay=Math.random()*3+'s';s.style.opacity=.25+Math.random()*.75;$('stars').appendChild(s)}
+ // estrellas concentradas formando la palabra
+ const chars=cfg.name.toUpperCase(); const points=[];
+ chars.split('').forEach((ch,ci)=>{
+   let baseX=32+ci*(36/Math.max(chars.length,1));
+   for(let k=0;k<28;k++){let s=document.createElement('span');s.className='gstar';s.style.left=(baseX+(Math.random()*5-2.5))+'%';s.style.top=(25+Math.random()*30)+'%';s.style.setProperty('--r',(10+Math.random()*25)+'px');s.style.animationDelay=(-Math.random()*12)+'s';$('galaxy').appendChild(s)}
+ });
+ cfg.flowers.forEach((text,i)=>{let f=document.createElement('div');f.className='flower';let angle=i/cfg.flowers.length*Math.PI*2;let rx=40+Math.random()*5, ry=27+Math.random()*7;f.style.left=(50+Math.cos(angle)*rx)+'%';f.style.bottom=(12+Math.sin(angle)*ry)+'%';f.style.transform='scale('+(0.55+Math.random()*.65)+')';f.innerHTML='<b class="petal"></b><b class="petal"></b><b class="petal"></b><b class="petal"></b><b class="petal"></b><i></i><span class="stem"></span>';f.onclick=()=>show(text);$('flowers').appendChild(f)});
+ // estrella central interactiva
+ let center=document.createElement('div');center.style.cssText='position:absolute;left:50%;top:48%;width:10px;height:10px;border-radius:50%;background:#fff;box-shadow:0 0 25px 8px #fff8;z-index:3;cursor:pointer';center.onclick=()=>show(cfg.final);$('galaxy').appendChild(center);
+}
+</script>
+</body>
+</html>
